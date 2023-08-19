@@ -5,7 +5,7 @@ const node_fetch_1 = require("node-fetch");
 const openai = require("openai");
 function fetchCodeCompletionTexts(prompt, fileName, MODEL_NAME, API_KEY, USE_GPU) {
     console.log(MODEL_NAME);
-    const API_URL = `https://api-inference.huggingface.co/models/${MODEL_NAME}`;
+    const API_URL = `http://127.0.0.1:8080/generate`;
     // Setup header with API key
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const headers = { "Authorization": `Bearer ${API_KEY}` };
@@ -14,16 +14,25 @@ function fetchCodeCompletionTexts(prompt, fileName, MODEL_NAME, API_KEY, USE_GPU
         return (0, node_fetch_1.default)(API_URL, {
             method: "POST",
             body: JSON.stringify({
-                "inputs": prompt, "parameters": {
-                    "max_new_tokens": 16, "return_full_text": false,
-                    "do_sample": true, "temperature": 0.8, "top_p": 0.95,
-                    "max_time": 10.0, "num_return_sequences": 3
+                "inputs": prompt,
+                "parameters": {
+                    "max_new_tokens": 16,
+                    "return_full_text": false,
+                    "do_sample": true,
+                    "temperature": 0.8,
+                    "top_p": 0.95,
+                    "max_time": 10.0,
+                    "num_return_sequences": 3
                 }
             }),
-            headers: headers
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${API_KEY}`
+            },
         })
             .then(res => res.json())
             .then(json => {
+            json = [json];
             if (Array.isArray(json)) {
                 const completions = Array();
                 for (let i = 0; i < json.length; i++) {

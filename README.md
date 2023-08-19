@@ -43,10 +43,23 @@ code .
 
 Alternatively to running the extension in debug mode, you can package it locally and install it.
 
-```$ npm install
-$ npm run esbuild
-$ vsce package
 ```
+npm install -g @vscode/vsce
+npm install
+npm run esbuild
+yes | vsce package
+code --install-extension code-clippy-0.0.1.vsix
+```
+
+## Serving models locally
+
+```sh
+volume=$PWD/data # share a volume with the Docker container to avoid downloading weights every run
+# model=Deci/DeciCoder-1b
+model=flax-community/gpt-neo-125M-code-clippy-dedup-2048
+docker run -e TRUST_REMOTE_CODE=true -e HF_MODEL_TRUST_REMOTE_CODE=true --gpus all --shm-size 1g -p 8080:80 -v $volume:/data ghcr.io/huggingface/text-generation-inference:1.0.1 --model-id $model 
+```
+
 Say 'y' to the warning. Then install the extension with vscode➡️…➡️Install from VSIX➡️<install directory/code-clippy-0.0.1.vsix>. Finally, once installed, set conf.resource.hfAPIKey to your HuggingFace API key.
 
 **Note -**
