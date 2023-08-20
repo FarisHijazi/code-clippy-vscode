@@ -2,12 +2,12 @@
 
 <p align="center">
     <br>
-    <img src="https://raw.githubusercontent.com/ncoop57/gpt-code-clippy/camera-ready/code_clippy_logo.jpg" width="256"/>
+    <img src="https://raw.githubusercontent.com/FarisHijazi/gpt-code-clippy/camera-ready/code_clippy_logo.jpg" width="256"/>
     <br>
     Courtesy of the awesome Aimee Trevett!
 <p>
 
-This extension is an effort to create an open source version of [Github Copilot](https://copilot.github.com/) where both the extension, model, and data that the model was trained on is free for everyone to use. If you'd like to learn more about how the model power Code Clippy, check out this [repo](https://github.com/ncoop57/gpt-code-clippy/).
+This extension is an effort to create an open source version of [Github Copilot](https://copilot.github.com/) where both the extension, model, and data that the model was trained on is free for everyone to use. If you'd like to learn more about how the model power Code Clippy, check out this [repo](https://github.com/FarisHijazi/gpt-code-clippy/).
 
 This extension also sits completely atop this other clone of Github Copilot aptly named [Captain Stack](https://github.com/hieunc229/copilot-clone), since instead of synthesizing the answers using deep learning, it extracts them from StackOverflow posts.
 
@@ -99,5 +99,5 @@ From these code clippy settings, you can also update your API key or enable usin
 
 ## 3. Limitations
 
-| :exclamation:  **Important -**  First and formost, this extension is a **prototype** and the model it was trained on is for **research purposes** only and should not be used for developing real world applications. This is because the default model that is used to generate the code suggestions was trained on a large set of data scraped from [GitHub]() that might have contained things such as vulnerable code or private information such as private keys or passwords. Vulnerable code or private information can and therefore probably will leak into the suggestions. Currently the suggestions are just limited to a few additional tokens since the model starts to [hallucinate]() variables and methods the longer suggestions it is allowed to generate. If you would like to read more about the shortcomings of the model used in the generation and data used to train the model please refer to this [model card]() and [datasheet]() that explain it more in-depth. If you would like to learn more about how the model was trained and data was collected please refer to this [repository](https://github.com/ncoop57/gpt-code-clippy/). |
+| :exclamation:  **Important -**  First and formost, this extension is a **prototype** and the model it was trained on is for **research purposes** only and should not be used for developing real world applications. This is because the default model that is used to generate the code suggestions was trained on a large set of data scraped from [GitHub]() that might have contained things such as vulnerable code or private information such as private keys or passwords. Vulnerable code or private information can and therefore probably will leak into the suggestions. Currently the suggestions are just limited to a few additional tokens since the model starts to [hallucinate]() variables and methods the longer suggestions it is allowed to generate. If you would like to read more about the shortcomings of the model used in the generation and data used to train the model please refer to this [model card]() and [datasheet]() that explain it more in-depth. If you would like to learn more about how the model was trained and data was collected please refer to this [repository](https://github.com/FarisHijazi/gpt-code-clippy/). |
 |-----------------------------------------|
