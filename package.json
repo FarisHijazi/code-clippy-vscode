@@ -39,6 +39,12 @@
 					"description": "Model name that will be used to generate the completions.",
 					"scope": "resource"
 				},
+				"conf.resource.hfAPIUrl": {
+					"type": "string",
+					"default": "https://api-inference.huggingface.co/models/{MODEL_NAME}",
+					"description": "Base URL for model endpoint",
+					"scope": "resource"
+				},
 				"conf.resource.hfAPIKey": {
 					"type": "string",
 					"default": "<API_KEY>",

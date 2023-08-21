@@ -22,6 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
 			// if (!USE_FAUXPILOT) {
 			const MODEL_NAME = configuration.get("conf.resource.hfModelName", "");
 			const API_KEY = configuration.get("conf.resource.hfAPIKey", "");
+			const API_URL = configuration.get("conf.resource.hfAPIUrl", "");
 			const USE_GPU = configuration.get("conf.resource.useGPU", false);
 			// }
 
@@ -54,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
 				else {	
 					try {
 						// Fetch the code completion based on the text in the user's document
-						rs = await fetchCodeCompletionTexts(textBeforeCursor, document.fileName, MODEL_NAME, API_KEY, USE_GPU);
+						rs = await fetchCodeCompletionTexts(textBeforeCursor, document.fileName, MODEL_NAME, API_URL, API_KEY, USE_GPU);
 					} catch (err) {
 
 						if (err instanceof Error) {

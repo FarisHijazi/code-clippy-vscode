@@ -5,9 +5,9 @@ export type FetchCodeCompletions = {
     completions: Array<string>
 }
 
-export function fetchCodeCompletionTexts(prompt: string, fileName: string, MODEL_NAME: string, API_KEY: string, USE_GPU: boolean): Promise<FetchCodeCompletions> {
+export function fetchCodeCompletionTexts(prompt: string, fileName: string, MODEL_NAME: string, API_URL: string, API_KEY: string, USE_GPU: boolean): Promise<FetchCodeCompletions> {
     console.log(MODEL_NAME);
-    const API_URL = `http://127.0.0.1:8080/generate`;
+    // const API_URL = `http://127.0.0.1:8080/generate`;
     // Setup header with API key
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const headers = { "Authorization": `Bearer ${API_KEY}` };
@@ -34,24 +34,29 @@ export function fetchCodeCompletionTexts(prompt: string, fileName: string, MODEL
         })
             .then(res => res.json())
             .then(json => {
-                json = [json]
-                if (Array.isArray(json)) {
-                    const completions = Array<string>();
-                    for (let i = 0; i < json.length; i++) {
-                        const completion = json[i].generated_text.trimStart();
-                        if (completion.trim() === "") continue;
-
-                        completions.push(
-                            completion
-                        );
+                if (!json) {
+                    return
+                }
+                // json = [json]
+                if (!Array.isArray(json)) {
+                    if ("error" in json) {
+                        console.log(json);
+                        throw new Error(json["error"]);
+                        return;
                     }
-                    console.log(completions);
-                    resolve({ completions });
+                    json = [json]
                 }
-                else {
-                    console.log(json);
-                    throw new Error(json["error"]);
+                const completions = Array<string>();
+                for (let i = 0; i < json.length; i++) {
+                    const completion = json[i].generated_text.trimStart();
+                    if (completion.trim() === "") continue;
+
+                    completions.push(
+                        completion
+                    );
                 }
+                console.log(completions);
+                resolve({ completions });
             })
             .catch(err => reject(err));
     });
