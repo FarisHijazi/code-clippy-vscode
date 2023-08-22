@@ -27,35 +27,39 @@
 		"configuration": {
 			"title": "Code Clippy Configuration",
 			"properties": {
-				"conf.resource.useFauxPilot": {
-					"type": "boolean",
-					"default": false,
-					"description": "Whether to use Faux Pilo: https://github.com/moyix/fauxpilot",
-					"scope": "resource"
-				},
-				"conf.resource.hfModelName": {
+				"conf.resource.modelName": {
 					"type": "string",
 					"default": "flax-community/gpt-neo-125M-code-clippy-dedup-2048",
 					"description": "Model name that will be used to generate the completions.",
 					"scope": "resource"
 				},
-				"conf.resource.hfAPIUrl": {
+				"conf.resource.APIUrl": {
 					"type": "string",
 					"default": "https://api-inference.huggingface.co/models/{MODEL_NAME}",
 					"description": "Base URL for model endpoint",
 					"scope": "resource"
 				},
-				"conf.resource.hfAPIKey": {
+				"conf.resource.APIKey": {
 					"type": "string",
 					"default": "<API_KEY>",
 					"description": "API key for using Huggingface's Inference API: https://api-inference.huggingface.co/docs/node/html/quicktour.html",
 					"scope": "resource"
 				},
-				"conf.resource.useGPU": {
-					"type": "boolean",
-					"default": false,
-					"description": "Whether to use GPU for faster completions. Must have Startup plan at a minimum.",
-					"scope": "resource"
+				"conf.resource.APIFormat": {
+					"type": "string",
+					"default": "HuggingFace API",
+					"description": "Choose the API format for the API that you're using",
+					"scope": "resource",
+					"enum": [
+						"OpenAI",
+						"HuggingFace API",
+						"HuggingFace text-generation-inference"
+					],
+					"enumDescriptions": [
+						"OpenAI-compatible format (OoobaBooga/text-generation-webui, fauxpilot, ...). Example: http://localhost:5001/chat/completions",
+						"HuggingFace API. Example: https://api-inference.huggingface.co/models/...",
+						"Using text-generation-inference https://github.com/huggingface/text-generation-inference"
+					]
 				}
 			}
 		}

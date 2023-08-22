@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import CSConfig from './config';
-import { fetchCodeCompletionTexts, fetchCodeCompletionTextsFaux } from './utils/fetchCodeCompletions';
+import { fetchCodeCompletionTexts } from './utils/fetchCodeCompletions';
 
 export function activate(context: vscode.ExtensionContext) {
 	const disposable = vscode.commands.registerCommand(
@@ -18,13 +18,13 @@ export function activate(context: vscode.ExtensionContext) {
 		provideInlineCompletionItems: async (document, position, context, token) => {
 			// Grab the api key from the extension's config
 			const configuration = vscode.workspace.getConfiguration('', document.uri);
-			const USE_FAUXPILOT = configuration.get("conf.resource.useFauxPilot", false);
 			// if (!USE_FAUXPILOT) {
-			const MODEL_NAME = configuration.get("conf.resource.hfModelName", "");
-			const API_KEY = configuration.get("conf.resource.hfAPIKey", "");
-			const API_URL = configuration.get("conf.resource.hfAPIUrl", "");
-			const USE_GPU = configuration.get("conf.resource.useGPU", false);
-			// }
+			const MODEL_NAME = configuration.get("conf.resource.modelName", "");
+			const API_KEY = configuration.get("conf.resource.APIKey", "");
+			const API_URL = configuration.get("conf.resource.APIUrl", "");
+			const API_FORMAT = configuration.get("conf.resource.APIFormat", "");
+			// const USE_GPU = configuration.get("conf.resource.useGPU", false);
+
 
 			// vscode.comments.createCommentController
 			const textBeforeCursor = document.getText();
@@ -39,37 +39,22 @@ export function activate(context: vscode.ExtensionContext) {
 			if (CSConfig.SEARCH_PHARSE_END.includes(textBeforeCursor[textBeforeCursor.length - 1]) || currLineBeforeCursor.trim() === "") {
 				let rs;
 
-				if (USE_FAUXPILOT) {
-					try {
-						// Fetch the code completion based on the text in the user's document
-						rs = await fetchCodeCompletionTextsFaux(textBeforeCursor);
-					} catch (err) {
-	
-						if (err instanceof Error) {
-							vscode.window.showErrorMessage(err.toString());
+				try {
+					// Fetch the code completion based on the text in the user's document
+					rs = await fetchCodeCompletionTexts(textBeforeCursor, document.fileName, MODEL_NAME, API_URL, API_KEY, API_FORMAT);
+				} catch (err) {
+
+					if (err instanceof Error) {
+						// Check if it is an issue with API token and if so prompt user to enter a correct one
+						if (err.toString() === "Error: Bearer token is invalid" || err.toString() === "Error: Authorization header is invalid, use 'Bearer API_TOKEN'") {
+							vscode.window.showInputBox(
+								{ "prompt": "Please enter your HF API key in order to use Code Clippy", "password": true }
+							).then(apiKey => configuration.update("conf.resource.APIKey", apiKey));
+
 						}
-						return { items: [] };
+						vscode.window.showErrorMessage(err.toString());
 					}
-				}
-
-				else {	
-					try {
-						// Fetch the code completion based on the text in the user's document
-						rs = await fetchCodeCompletionTexts(textBeforeCursor, document.fileName, MODEL_NAME, API_URL, API_KEY, USE_GPU);
-					} catch (err) {
-
-						if (err instanceof Error) {
-							// Check if it is an issue with API token and if so prompt user to enter a correct one
-							if (err.toString() === "Error: Bearer token is invalid" || err.toString() === "Error: Authorization header is invalid, use 'Bearer API_TOKEN'") {
-								vscode.window.showInputBox(
-									{ "prompt": "Please enter your HF API key in order to use Code Clippy", "password": true }
-								).then(apiKey => configuration.update("conf.resource.hfAPIKey", apiKey));
-
-							}
-							vscode.window.showErrorMessage(err.toString());
-						}
-						return { items: [] };
-					}
+					return { items: [] };
 				}
 
 				if (rs == null) {
